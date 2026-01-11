@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: Deals Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /deals:
+    post:
+      summary: Record Deal
+      operationId: createDeal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Deal" }
+      responses:
+        "201": { description: Created }
+    get:
+      summary: Get Deals
+      operationId: getDeals
+      parameters:
+        - name: projectId
+          in: query
+          schema: { type: string }
+        - name: salesExecutiveId
+          in: query
+          schema: { type: string }
+      responses:
+        "200": { description: List }
+
+components:
+  schemas:
+    Deal:
+      type: object
+      required: [clientName, projectId, agreementValue]
+      properties:
+        id: { type: string }
+        dealDate: { type: string, format: date }
+        clientName: { type: string }
+        projectId: { type: string }
+        configuration: { type: string }
+        agreementValue: { type: number, format: double }
+        gst: { type: number, format: double }
+        invoiceValue: { type: number, format: double }
+        tds: { type: number, format: double }
+        receivableValue: { type: number, format: double }
+        receivedValue: { type: number, format: double }
+        salesExecutiveId: { type: string }
+        closingIncentive: { type: number }
+        sourcingIncentive: { type: number }
+        netBalance: { type: number }

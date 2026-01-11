@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Developers Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /developers:
+    post:
+      summary: Create Developer
+      operationId: createDeveloper
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Developer"
+      responses:
+        "201":
+          description: Developer created
+    get:
+      summary: Get Developers
+      operationId: getDevelopers
+      responses:
+        "200":
+          description: Developer list
+
+  /developers/{id}:
+    put:
+      summary: Update Developer
+      operationId: updateDeveloper
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Developer"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete Developer
+      operationId: deleteDeveloper
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    Developer:
+      type: object
+      required:
+        - developerName
+      properties:
+        id:
+          type: string
+        developerName:
+          type: string
+          example: Lodha Group

@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: VC/VP Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /vcvp:
+    post:
+      summary: Create VC/VP Entry
+      operationId: createVcvp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vcvp"
+      responses:
+        "201":
+          description: VC/VP created
+    get:
+      summary: Get VC/VP Records
+      operationId: getVcvps
+      parameters:
+        - name: salesExecutiveId
+          in: query
+          schema: { type: string }
+        - name: projectId
+          in: query
+          schema: { type: string }
+        - name: visitStatus
+          in: query
+          schema: { type: string }
+        - name: fromDate
+          in: query
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: VC/VP list
+
+  /vcvp/{id}:
+    put:
+      summary: Update VC/VP
+      operationId: updateVcvp
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vcvp"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete VC/VP
+      operationId: deleteVcvp
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    Vcvp:
+      type: object
+      required:
+        - leadId
+        - projectId
+        - visitType
+        - visitDate
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        salesExecutiveId:
+          type: string
+        leadId:
+          type: string
+        leadName:
+          type: string
+        projectId:
+          type: string
+        visitType:
+          type: string
+          example: Confirmed
+        visitDate:
+          type: string
+          format: date
+        visitTime:
+          type: string
+          example: "12:00 PM"
+        vcvpStatus:
+          type: string
+          example: Visited
+        comments:
+          type: string

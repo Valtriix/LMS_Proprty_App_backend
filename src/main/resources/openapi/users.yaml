@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Users Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /users:
+    post:
+      summary: Create User
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/User" }
+      responses:
+        "201": { description: Created }
+    get:
+      summary: Get Users
+      operationId: getUsers
+      parameters:
+        - name: department
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        "200": { description: List }
+
+  /users/{id}:
+    put:
+      summary: Update User
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/User" }
+      responses:
+        "200": { description: Updated }
+    delete:
+      summary: Deactivate User
+      operationId: deactivateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204": { description: Deactivated }
+
+components:
+  schemas:
+    User:
+      type: object
+      required: [userName, email, department, position]
+      properties:
+        id: { type: string }
+        userStatus: { type: string, example: Active }
+        userName: { type: string }
+        email: { type: string, format: email }
+        contact: { type: string }
+        department: { type: string }
+        position: { type: string }
+        projectAssigned:
+          type: array
+          items: { type: string }
+        telecallerAssigned:
+          type: array
+          items: { type: string }
+        permissions:
+          type: array
+          items: { type: string }

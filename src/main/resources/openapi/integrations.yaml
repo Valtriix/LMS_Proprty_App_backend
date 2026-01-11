@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Integrations Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /integrations/meta/sync:
+    post:
+      summary: Sync Meta Leads
+      operationId: syncMetaLeads
+      responses:
+        "200": { description: Synced }
+
+  /integrations/google/sheets/import:
+    post:
+      summary: Import from Google Sheets
+      operationId: importFromSheets
+      responses:
+        "200": { description: Imported }

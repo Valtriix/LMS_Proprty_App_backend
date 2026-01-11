@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Site Visits Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /site-visits:
+    post:
+      summary: Record Site Visit
+      operationId: createSiteVisit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteVisit"
+      responses:
+        "201":
+          description: Site visit recorded
+    get:
+      summary: Get Site Visits
+      operationId: getSiteVisits
+      parameters:
+        - name: salesExecutiveId
+          in: query
+          schema: { type: string }
+        - name: projectId
+          in: query
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: fromDate
+          in: query
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: Site visit list
+
+  /site-visits/{id}:
+    put:
+      summary: Update Site Visit
+      operationId: updateSiteVisit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteVisit"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete Site Visit
+      operationId: deleteSiteVisit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    SiteVisit:
+      type: object
+      required:
+        - leadId
+        - projectId
+        - visitDate
+      properties:
+        id:
+          type: string
+        salesExecutiveId:
+          type: string
+        leadId:
+          type: string
+        leadName:
+          type: string
+        configuration:
+          type: string
+        projectId:
+          type: string
+        visitDate:
+          type: string
+          format: date
+        closingManagerId:
+          type: string
+        unitOffered:
+          type: string
+        clientObjections:
+          type: string
+        comments:
+          type: string
+        visitStatus:
+          type: string
+          example: Warm
+        crossPitchProjects:
+          type: array
+          items:
+            type: string

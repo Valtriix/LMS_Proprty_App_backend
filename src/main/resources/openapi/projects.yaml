@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Projects Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /projects:
+    post:
+      summary: Create Project
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        "201":
+          description: Project created
+    get:
+      summary: Get Projects
+      operationId: getProjects
+      parameters:
+        - name: developerId
+          in: query
+          schema: { type: string }
+        - name: locationId
+          in: query
+          schema: { type: string }
+        - name: microMarket
+          in: query
+          schema: { type: string }
+        - name: projectType
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        "200":
+          description: Project list
+
+  /projects/{id}:
+    get:
+      summary: Get Project by ID
+      operationId: getProjectById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Project details
+    put:
+      summary: Update Project
+      operationId: updateProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete Project
+      operationId: deleteProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    Project:
+      type: object
+      required:
+        - projectName
+        - developerId
+        - locationId
+      properties:
+        id:
+          type: string
+        projectName:
+          type: string
+        developerId:
+          type: string
+        locationId:
+          type: string
+        microMarket:
+          type: string
+        projectType:
+          type: string
+          example: Residential
+        sourcingManagerId:
+          type: string
+        closingManagerId:
+          type: string
+        tagPeriodDays:
+          type: integer
+          example: 60
+        projectOwnerIds:
+          type: array
+          items:
+            type: string

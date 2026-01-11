@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Tools & Masters Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /masters/{type}:
+    post:
+      summary: Create Master Value
+      operationId: createMaster
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [LEAD_STATUS, LEAD_QUALITY, VCVP_STATUS, VISIT_STATUS, GROUP, TAG]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MasterValue"
+      responses:
+        "201":
+          description: Created
+
+    get:
+      summary: Get Master Values by Type
+      operationId: getMasters
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [LEAD_STATUS, LEAD_QUALITY, VCVP_STATUS, VISIT_STATUS, GROUP, TAG]
+      responses:
+        "200":
+          description: List
+
+  /masters/{type}/{id}:
+    put:
+      summary: Update Master Value
+      operationId: updateMaster
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MasterValue"
+      responses:
+        "200":
+          description: Updated
+
+    delete:
+      summary: Delete Master Value
+      operationId: deleteMaster
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    MasterValue:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+          default: true

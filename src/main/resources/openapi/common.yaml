@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: Three Realty CRM - Common
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    PageResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer
+
+    Audit:
+      type: object
+      properties:
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+
+security:
+  - bearerAuth: []

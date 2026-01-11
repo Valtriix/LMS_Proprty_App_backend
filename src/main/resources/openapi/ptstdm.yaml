@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: PTSTDM Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /ptstdm/{type}:
+    post:
+      summary: Create PTSTDM Entry
+      operationId: createPtstdm
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [POSITION, PROCESS, TASK, TRAINING, DEPARTMENT]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PtstdmItem" }
+      responses:
+        "201": { description: Created }
+    get:
+      summary: Get PTSTDM Entries
+      operationId: getPtstdm
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: List }
+
+components:
+  schemas:
+    PtstdmItem:
+      type: object
+      required: [name]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }

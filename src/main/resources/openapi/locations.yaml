@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: Locations Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /locations:
+    post:
+      summary: Create Location
+      operationId: createLocation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "201":
+          description: Location created
+    get:
+      summary: Get Locations
+      operationId: getLocations
+      responses:
+        "200":
+          description: Location list
+
+  /locations/{id}:
+    put:
+      summary: Update Location
+      operationId: updateLocation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      summary: Delete Location
+      operationId: deleteLocation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+components:
+  schemas:
+    Location:
+      type: object
+      required:
+        - locationName
+      properties:
+        id:
+          type: string
+        locationName:
+          type: string
+          example: Mumbai
+        microMarkets:
+          type: array
+          items:
+            type: string
+            example: Powai

@@ -1,0 +1,39 @@
+openapi: 3.0.3
+info:
+  title: Reports Module
+  version: 1.0.0
+
+servers:
+  - url: /crm/api/v1
+
+security:
+  - bearerAuth: []
+
+paths:
+  /reports/dashboard:
+    get:
+      summary: Dashboard Summary
+      operationId: dashboardReport
+      responses:
+        "200": { description: Dashboard data }
+
+  /reports/leads:
+    get:
+      summary: Lead Reports
+      operationId: leadReports
+      parameters:
+        - name: fromDate
+          in: query
+          schema: { type: string, format: date }
+        - name: toDate
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        "200": { description: Lead report }
+
+  /reports/calls:
+    get:
+      summary: Call Log Report
+      operationId: callLogReport
+      responses:
+        "200": { description: Call summary }
