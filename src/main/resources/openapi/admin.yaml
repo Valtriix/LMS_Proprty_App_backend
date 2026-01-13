@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Admin
+    description: Administrative APIs
+
 security:
   - bearerAuth: []
 

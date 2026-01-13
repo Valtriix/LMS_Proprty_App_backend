@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Integrations
+    description: APIs for managing integrations
+
 security:
   - bearerAuth: []
 

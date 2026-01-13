@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Leads
+    description: Lead management APIs
+
 security:
   - bearerAuth: []
 

@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: PTSTDM
+    description: APIs for managing PTSTDM entries
+
 security:
   - bearerAuth: []
 

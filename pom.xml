@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version>
+        <version>3.2.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.lms</groupId>
@@ -13,35 +13,66 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>real-estate-crm</name>
     <description>Demo project for Spring Boot</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>17</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <!--<dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-elasticsearch</artifactId>
-        </dependency>-->
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- OpenAPI / Swagger -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <!-- Jakarta APIs already used -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+
+        <!-- Add legacy javax APIs required by generated sources (compile-time) -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,41 +86,20 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
-            <scope>test</scope>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-elasticsearch-test</artifactId>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
 
     <build>
         <plugins>
+            <!-- configure compiler for Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                        <path>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-configuration-processor</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -102,267 +112,292 @@
                     </excludes>
                 </configuration>
             </plugin>
+
             <!-- OpenAPI Generator -->
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.2.0</version>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.2.0</version>
+                <executions>
 
-				<executions>
+                    <!-- Leads -->
+                    <execution>
+                        <id>generate-leads</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/leads.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.leads</apiPackage>
+                            <modelPackage>com.lms.crm.model.leads</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
+                                <dateLibrary>java8</dateLibrary>
+                                <openApiNullable>false</openApiNullable>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Leads -->
-					<execution>
-						<id>generate-leads</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/leads.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.leads</apiPackage>
-							<modelPackage>com.threerealty.crm.model.leads</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-								<dateLibrary>java8</dateLibrary>
-								<openApiNullable>false</openApiNullable>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Projects -->
+                    <execution>
+                        <id>generate-projects</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/projects.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.projects</apiPackage>
+                            <modelPackage>com.lms.crm.model.projects</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Projects -->
-					<execution>
-						<id>generate-projects</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/projects.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.projects</apiPackage>
-							<modelPackage>com.threerealty.crm.model.projects</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Locations -->
+                    <execution>
+                        <id>generate-locations</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/locations.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.locations</apiPackage>
+                            <modelPackage>com.lms.crm.model.locations</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Locations -->
-					<execution>
-						<id>generate-locations</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/locations.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.locations</apiPackage>
-							<modelPackage>com.threerealty.crm.model.locations</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Developers -->
+                    <execution>
+                        <id>generate-developers</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/developers.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.developers</apiPackage>
+                            <modelPackage>com.lms.crm.model.developers</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Developers -->
-					<execution>
-						<id>generate-developers</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/developers.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.developers</apiPackage>
-							<modelPackage>com.threerealty.crm.model.developers</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- VC/VP -->
+                    <execution>
+                        <id>generate-vcvp</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/vc-vp.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.vcvp</apiPackage>
+                            <modelPackage>com.lms.crm.model.vcvp</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- VC/VP -->
-					<execution>
-						<id>generate-vcvp</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/vc-vp.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.vcvp</apiPackage>
-							<modelPackage>com.threerealty.crm.model.vcvp</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Site Visits -->
+                    <execution>
+                        <id>generate-site-visits</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/site-visits.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.sitevisits</apiPackage>
+                            <modelPackage>com.lms.crm.model.sitevisits</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Site Visits -->
-					<execution>
-						<id>generate-site-visits</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/site-visits.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.sitevisits</apiPackage>
-							<modelPackage>com.threerealty.crm.model.sitevisits</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Tools -->
+                    <execution>
+                        <id>generate-tools</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/tools.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.tools</apiPackage>
+                            <modelPackage>com.lms.crm.model.tools</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Tools -->
-					<execution>
-						<id>generate-tools</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/tools.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.tools</apiPackage>
-							<modelPackage>com.threerealty.crm.model.tools</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Users -->
+                    <execution>
+                        <id>generate-users</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/users.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.users</apiPackage>
+                            <modelPackage>com.lms.crm.model.users</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Users -->
-					<execution>
-						<id>generate-users</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/users.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.users</apiPackage>
-							<modelPackage>com.threerealty.crm.model.users</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Deals -->
+                    <execution>
+                        <id>generate-deals</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/deals.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.deals</apiPackage>
+                            <modelPackage>com.lms.crm.model.deals</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Deals -->
-					<execution>
-						<id>generate-deals</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/deals.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.deals</apiPackage>
-							<modelPackage>com.threerealty.crm.model.deals</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- PTSTDM -->
+                    <execution>
+                        <id>generate-ptstdm</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/ptstdm.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.ptstdm</apiPackage>
+                            <modelPackage>com.lms.crm.model.ptstdm</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- PTSTDM -->
-					<execution>
-						<id>generate-ptstdm</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/ptstdm.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.ptstdm</apiPackage>
-							<modelPackage>com.threerealty.crm.model.ptstdm</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Reports -->
+                    <execution>
+                        <id>generate-reports</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/reports.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.reports</apiPackage>
+                            <modelPackage>com.lms.crm.model.reports</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Reports -->
-					<execution>
-						<id>generate-reports</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/reports.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.reports</apiPackage>
-							<modelPackage>com.threerealty.crm.model.reports</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
+                    <!-- Integrations -->
+                    <execution>
+                        <id>generate-integrations</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/integrations.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.integrations</apiPackage>
+                            <modelPackage>com.lms.crm.model.integrations</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
 
-					<!-- Integrations -->
-					<execution>
-						<id>generate-integrations</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/integrations.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.integrations</apiPackage>
-							<modelPackage>com.threerealty.crm.model.integrations</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
-
-					<!-- Admin -->
-					<execution>
-						<id>generate-admin</id>
-						<goals><goal>generate</goal></goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/openapi/admin.yaml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-boot</library>
-							<apiPackage>com.threerealty.crm.api.admin</apiPackage>
-							<modelPackage>com.threerealty.crm.model.admin</modelPackage>
-							<basePackage>com.threerealty.crm</basePackage>
-							<configOptions>
-								<interfaceOnly>true</interfaceOnly>
-								<useTags>true</useTags>
-							</configOptions>
-							<generateSupportingFiles>false</generateSupportingFiles>
-						</configuration>
-					</execution>
-
-				</executions>
-			</plugin>
-
-		</plugins>
+                    <!-- Admin -->
+                    <execution>
+                        <id>generate-admin</id>
+                        <goals><goal>generate</goal></goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi/admin.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <apiPackage>com.lms.crm.api.admin</apiPackage>
+                            <modelPackage>com.lms.crm.model.admin</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <additionalProperties>
+                                <useTags>true</useTags>
+                                <apiNameSuffix>Api</apiNameSuffix>
+                            </additionalProperties>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
 </project>

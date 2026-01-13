@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Projects
+    description: APIs for managing projects
+
 security:
   - bearerAuth: []
 

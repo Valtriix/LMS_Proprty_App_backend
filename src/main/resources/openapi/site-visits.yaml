@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Site Visits
+    description: APIs for managing site visits
+
 security:
   - bearerAuth: []
 

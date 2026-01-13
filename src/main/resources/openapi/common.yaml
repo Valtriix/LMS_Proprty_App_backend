@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Common
+    description: Common definitions and security schemes
+
 components:
   securitySchemes:
     bearerAuth:

@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Reports
+    description: APIs for generating reports
+
 security:
   - bearerAuth: []
 

@@ -6,6 +6,10 @@ info:
 servers:
   - url: /crm/api/v1
 
+tags:
+  - name: Deals
+    description: Deal management APIs
+
 security:
   - bearerAuth: []
 
