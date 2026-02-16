@@ -8,6 +8,7 @@ public class RealEstateCrmApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RealEstateCrmApplication.class, args);
+		System.out.println("Hello World!!");
 	}
 
 }

@@ -2,17 +2,17 @@ openapi: 3.0.3
 info:
   title: Leads Module
   version: 1.0.0
-
+ 
 servers:
   - url: /crm/api/v1
-
+ 
 tags:
   - name: Leads
     description: Lead management APIs
-
+ 
 security:
   - bearerAuth: []
-
+ 
 paths:
   /leads:
     post:
@@ -27,6 +27,10 @@ paths:
       responses:
         "201":
           description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
     get:
       summary: Get Leads with Filters
       operationId: getLeads
@@ -66,7 +70,13 @@ paths:
       responses:
         "200":
           description: Lead list
-
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lead"
+ 
   /leads/{id}:
     get:
       summary: Get Lead by ID
@@ -80,6 +90,10 @@ paths:
       responses:
         "200":
           description: Lead details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
     put:
       summary: Update Lead
       operationId: updateLead
@@ -97,7 +111,12 @@ paths:
               $ref: "#/components/schemas/Lead"
       responses:
         "200":
-          description: Updated
+          description: Updated lead
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+ 
     delete:
       summary: Delete Lead
       operationId: deleteLead
@@ -110,7 +129,7 @@ paths:
       responses:
         "204":
           description: Deleted
-
+ 
   /leads/compliance:
     get:
       summary: Lead Process Compliance Report
@@ -127,7 +146,7 @@ paths:
       responses:
         "200":
           description: Compliance data
-
+ 
 components:
   schemas:
     Lead:
@@ -183,3 +202,4 @@ components:
           type: string
         landingPageUrl:
           type: string
+ 

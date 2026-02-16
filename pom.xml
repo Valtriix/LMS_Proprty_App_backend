@@ -27,6 +27,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        
+        <!-- H2database -->
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		 <!-- JPA dependence -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 
         <!-- OpenAPI / Swagger -->
         <dependency>
@@ -136,6 +150,10 @@
                                 <useJakartaEe>true</useJakartaEe>
                                 <dateLibrary>java8</dateLibrary>
                                 <openApiNullable>false</openApiNullable>
+                                
+                                <!--disable APIUtil completely -->
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                
                             </configOptions>
                             <additionalProperties>
                                 <useTags>true</useTags>
@@ -144,6 +162,8 @@
                             <generateSupportingFiles>false</generateSupportingFiles>
                         </configuration>
                     </execution>
+                    
+                   
 
                     <!-- Projects -->
                     <execution>
@@ -157,6 +177,11 @@
                             <modelPackage>com.lms.crm.model.projects</modelPackage>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
+                                
+                                  
+                                <!--disable APIUtil completely -->
+                                <skipDefaultInterface>true</skipDefaultInterface>
+
                             </configOptions>
                             <additionalProperties>
                                 <useTags>true</useTags>
@@ -283,6 +308,10 @@
                             <modelPackage>com.lms.crm.model.users</modelPackage>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
+                                
+                                  <!--disable APIUtil completely -->
+                                <skipDefaultInterface>true</skipDefaultInterface>
+            
                             </configOptions>
                             <additionalProperties>
                                 <useTags>true</useTags>
